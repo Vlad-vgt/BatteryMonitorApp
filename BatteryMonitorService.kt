@@ -12,7 +12,7 @@ import android.app.NotificationManager
 import android.app.NotificationChannel
 import androidx.core.app.NotificationCompat
 import android.os.Build
-import com.my.BatteryReceiver.R  // ← Замените на свой package!
+import com.my.BatteryReceiver.R
 
 class BatteryMonitorService : Service() {
 	companion object {
