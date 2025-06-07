@@ -1,4 +1,4 @@
-package com.my.BatteryReceiver // Замените на ваш package name
+package com.my.BatteryReceiver
 
 import android.provider.Settings
 import android.content.Intent
