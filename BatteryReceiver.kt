@@ -23,10 +23,11 @@ class BatteryReceiver : BroadcastReceiver() {
 		const val LOW_BATTERY_NOTIFICATION_ID = 1
 		const val FULL_BATTERY_NOTIFICATION_ID = 2
 		
+		private var isCharging = false //Зарядка подключена?
 		private var isLowBatteryAlertActive = false
 		private var isFullBatteryAlertActive = false
-		private var isRingerOnLowBattery = false//Контроль рингтона при низком заряде
-		private var isRingerOnFullBattery = false//Контроль при высоком заряде
+		var isRingerOnLowBattery = false //Контроль рингтона при низком заряде
+		var isRingerOnFullBattery = false //Контроль при высоком заряде
 		
 		private var ringtone: Ringtone? = null
 		
@@ -34,8 +35,11 @@ class BatteryReceiver : BroadcastReceiver() {
 			ringtone?.isLooping = false
 			ringtone?.stop()
 			ringtone = null
-			isRingerOnFullBattery = true
-			isRingerOnLowBattery = true
+			if (isCharging) {
+				isRingerOnFullBattery = true
+			}else{
+				isRingerOnLowBattery = true
+			}
 			//При выкл. рингтона поднимаем флаг
 			//чтобы не включался при выкл. экрана
 			
@@ -53,7 +57,6 @@ class BatteryReceiver : BroadcastReceiver() {
 		val prefs = context.getSharedPreferences("battery_prefs", Context.MODE_PRIVATE)
 		if (!prefs.getBoolean("monitoring_enabled", true)) return
 		
-		var isCharging = false
 		var batteryPct: Float = 0f
 		var maxLevel: Int = 0
 		var minLevel: Int = 0
@@ -97,9 +100,10 @@ class BatteryReceiver : BroadcastReceiver() {
 		}
 		//Зарядка вкл/выкл сбрасываем флаг
 		//для дальнейшего вывода сообщения и рингтона
-		if (isCharging) {
+		if (isCharging || batteryPct >= minLevel) {
 			isRingerOnLowBattery = false
-		}else{
+		}
+		if (!isCharging) {
 			isRingerOnFullBattery = false
 		}
 		// Если флаг поднят (true) выкл. рингтон
