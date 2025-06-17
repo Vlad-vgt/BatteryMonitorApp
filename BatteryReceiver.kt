@@ -100,7 +100,7 @@ class BatteryReceiver : BroadcastReceiver() {
 		}
 		//Зарядка вкл/выкл сбрасываем флаг
 		//для дальнейшего вывода сообщения и рингтона
-		if (isCharging || batteryPct >= minLevel) {
+		if (isCharging || batteryPct > minLevel) {
 			isRingerOnLowBattery = false
 		}
 		if (!isCharging) {
